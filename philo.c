@@ -6,7 +6,7 @@
 /*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/08/30 17:24:48 by aghazi           ###   ########.fr       */
+/*   Updated: 2022/09/01 17:52:14 by aghazi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int take_forks(t_philo *philo)
             *(philo->left_fork) = 1;
             printf("phlio no %d picked LEFT fork \n", philo->philo_id);
             pthread_mutex_unlock(philo->left_mutex);
-            return (1);
+            return (0);
         }
         else
         {
@@ -37,23 +37,21 @@ int take_forks(t_philo *philo)
         }
     }
     pthread_mutex_unlock(philo->right_mutex);
-    return (0);
+    return (1);
 }
 
 void    *start(void *philo)
 {
     
     t_philo *ph = (t_philo *)philo;
-    int i;
 
-    i = 0;
-    while (i < ph->general_info->no_of_philos)
+    while (1)
     {
         while (take_forks(ph))
         {
-            usleep(500);
+            usleep(1500);
         }
-        i++;
+        printf("Phillo no %d started eating \n", ph->philo_id);
     }
     
     
@@ -98,7 +96,7 @@ int init_forks(t_philo *ph, t_info *info)
         if (i == 0)
             ph[i].left_fork = &info->forks[info->no_of_philos - 1];
         else
-            ph[i].left_fork = &info->forks[i];
+            ph[i].left_fork = &info->forks[i - 1];
         i++;
     }
     return (0);
@@ -148,6 +146,7 @@ int main(int arc, char **argv)
             philos[i].philo_id = i;
             pthread_create(&life_thread, NULL, &start, &philos[i]);
             i++;
+            sleep (1);
         }
         while(info.no_of_philos)
         {
