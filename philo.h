@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef struct s_info{
     int no_of_philos;
