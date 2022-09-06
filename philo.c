@@ -6,7 +6,7 @@
 /*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/06 22:01:21 by aghazi           ###   ########.fr       */
+/*   Updated: 2022/09/06 22:15:22 by aghazi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	*start(void *philo)
 	{
 		while (take_forks(ph)) // check here if phil is alive or not
 			usleep(500);
-		printf("phlio no %d started eating \n", ph->philo_id);
+		printf("%ld phlio no %d started eating \n",get_time() - ph->general_info->start_time, ph->philo_id);
 		ph->general_info->start_time = get_time();
 		ag_usleep(ph->general_info->time_to_eat);
 		drop_forks(ph);
-		printf("phlio no %d is sleeping \n", ph->philo_id);
+		printf("%ld phlio no %d is sleeping \n",get_time() - ph->general_info->start_time , ph->philo_id);
 		ag_usleep(ph->general_info->time_to_sleep);
 	}
 	return NULL;
@@ -53,9 +53,8 @@ int	main(int arc, char **argv)
 	t_philo philos[200];
 	t_info  info;
 	int i;
-	// long start_time;// add it in gernal sturct
+    
 	info.start_time = get_time();
-
 	printf("start = %ld\n", get_time() - info.start_time);
 	// sleep(5);
     ag_usleep(5000);
