@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/05 14:04:43 by dfurneau         ###   ########.fr       */
+/*   Updated: 2022/09/06 22:01:21 by aghazi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_alive(t_philo *ph)
 {
-	if (get_time() - ph->general_info->start_time > ph->general_info->time_to_die)
+	if (get_time() - ph->general_info->start_time >= ph->general_info->time_to_die)
 		return (0);
 	return (1);
 }
@@ -25,21 +25,14 @@ void	*start(void *philo)
 
 	while (1) // while everyone still alive
 	{
-		while (take_forks(ph))
+		while (take_forks(ph)) // check here if phil is alive or not
 			usleep(500);
 		printf("phlio no %d started eating \n", ph->philo_id);
-		sleep(14);
 		ph->general_info->start_time = get_time();
-		// usleep(ph->general_info->time_to_eat);
-		if (!is_alive(&ph))
-			return (0);
+		ag_usleep(ph->general_info->time_to_eat);
 		drop_forks(ph);
 		printf("phlio no %d is sleeping \n", ph->philo_id);
-		sleep(14);
-		// usleep(ph->general_info->time_to_sleep);
-		usleep(500);
-		if (!is_alive(&ph))
-			return (0);
+		ag_usleep(ph->general_info->time_to_sleep);
 	}
 	return NULL;
 }
@@ -55,13 +48,6 @@ int parse_input(int ac, char **av, t_info *info)
 	return (0);
 }
 
-long	get_time()//change it to milliseconds
-{
-	struct timeval current_time;
-	gettimeofday(&current_time, NULL);
-	return(current_time.tv_sec * 1000 + (long)(current_time.tv_usec / 1000));
-}
-
 int	main(int arc, char **argv)
 {
 	t_philo philos[200];
@@ -71,7 +57,8 @@ int	main(int arc, char **argv)
 	info.start_time = get_time();
 
 	printf("start = %ld\n", get_time() - info.start_time);
-	sleep(5);
+	// sleep(5);
+    ag_usleep(5000);
 	printf("start = %ld\n", get_time() - info.start_time);
 	i = 0;
 	philos->right_fork = 0;
@@ -96,7 +83,6 @@ int	main(int arc, char **argv)
 			pthread_join(life_thread, NULL);
 			info.no_of_philos--;
 		}
-		// printf("flag = %d \n", info.death_flag);
 	}
 	return (0);
 }

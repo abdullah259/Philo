@@ -3,7 +3,7 @@ CFLAGS = -Werror -Wextra -Wall -g
 
 NAME=philo
 
-SRC = life_of_philo.c philo.c
+SRC = life_of_philo.c philo.c philo_utlit.c
 
 OBJ = $(SRC:.c=.o)
 

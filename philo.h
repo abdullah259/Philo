@@ -29,10 +29,12 @@ typedef struct s_philo{
 	pthread_mutex_t	*left_mutex;
 }t_philo;
 
-int	drop_forks(t_philo *philo);
-int	take_forks(t_philo *philo);
-int	init_forks(t_philo *ph, t_info *info);
-int	init_philos(t_philo *ph, t_info *info);
-int	init_mutex(t_philo *ph, t_info *info);
+int     drop_forks(t_philo *philo);
+int     take_forks(t_philo *philo);
+int     init_forks(t_philo *ph, t_info *info);
+int     init_philos(t_philo *ph, t_info *info);
+int     init_mutex(t_philo *ph, t_info *info);
+long	get_time();
+void    ag_usleep(long c);
 
 #endif
