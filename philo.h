@@ -35,6 +35,6 @@ int     init_forks(t_philo *ph, t_info *info);
 int     init_philos(t_philo *ph, t_info *info);
 int     init_mutex(t_philo *ph, t_info *info);
 long	get_time();
-void    ag_usleep(long c);
-
+int     ag_usleep(long c, t_philo *ph);
+int     is_alive(t_philo *ph);
 #endif

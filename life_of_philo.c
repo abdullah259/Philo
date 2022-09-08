@@ -13,7 +13,7 @@ int	drop_forks(t_philo *philo)
 	return (0);
 }
 
-int	take_forks(t_philo *philo)
+int	 take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_mutex);
 	if (*(philo->right_fork) == 0)
