@@ -6,7 +6,7 @@
 /*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/05 14:04:43 by dfurneau         ###   ########.fr       */
+/*   Updated: 2022/09/06 18:00:42 by dfurneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	main(int arc, char **argv)
 	printf("start = %ld\n", get_time() - info.start_time);
 	i = 0;
 	philos->right_fork = 0;
-	philos->left_fork = 0;
+	philos->left_fork = 0;	
 	pthread_t life_thread;
 	if (arc == 5 || arc == 6)
 	{
