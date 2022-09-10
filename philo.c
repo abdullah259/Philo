@@ -6,45 +6,55 @@
 /*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/08 20:51:01 by dfurneau         ###   ########.fr       */
+/*   Updated: 2022/09/10 10:32:05 by dfurneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	is_alive(t_philo *ph)
+void	is_alive(t_philo *ph)
 {
 	if (get_time() - ph->start_eat >= ph->general_info->time_to_die)
-		return (0);
-	return (1);
+	{
+		ph->general_info->death_flag = 1;
+		print_status(ph,'d');
+	}
 }
 
 void	*start(void *philo)
 {
 	t_philo *ph = (t_philo *)philo;
 
-	while (1 && ph->general_info->death_flag == 0)
+	ph->start_eat = ph->general_info->start_time;
+	while (ph->general_info->death_flag == 0)
 	{
-		if (ph->general_info->death_flag == 0)
+		while (ph->general_info->death_flag == 0 && take_forks(ph))
 		{
-			while (take_forks(ph) && ph->general_info->death_flag == 0) // check here if phil is alive or not
-				if (!ag_usleep(ph->general_info->time_to_eat,ph))
-                    exit(0);
-			printf("%ld phlio no %d started eating \n",get_time() - ph->general_info->start_time, ph->philo_id);
-			ph->start_eat = get_time();
-			if (!ag_usleep(ph->general_info->time_to_eat,ph))
-                exit(0);
-			drop_forks(ph);
-			printf("%ld phlio no %d is sleeping \n",get_time() - ph->general_info->start_time , ph->philo_id);
-			if (!ag_usleep(ph->general_info->time_to_eat,ph))
-                exit(0);
-			printf("Thinking\n");
+			usleep(500);
+			is_alive(ph);
 		}
-		// if (ph->general_info->death_flag == 1)
-		// {
-		// 	printf("philo is dead\n");
-		// 	break;
-		// }
+		if (ph->general_info->death_flag == 1)
+		{
+			is_alive(ph);
+			return NULL;
+		}
+		print_status(ph,'e');
+		ph->start_eat = get_time();
+		if (ph->general_info->death_flag == 1)
+		{
+			is_alive(ph);
+			return NULL;
+		}
+		ag_usleep(ph->general_info->time_to_eat,ph);
+		if (ph->general_info->death_flag == 1)
+		{
+			is_alive(ph);
+			return NULL;
+		}
+		drop_forks(ph);
+		print_status(ph, 's');
+		ag_usleep(ph->general_info->time_to_sleep,ph); // change here was to to eat || now time to slepp
+		print_status(ph, 't');
 	}
 	return NULL;
 }
@@ -80,26 +90,17 @@ int	main(int arc, char **argv)
     ft_init(&info);
 	info.start_time = get_time();
 	printf("start = %ld\n", get_time() - info.start_time);
-	// sleep(5);
-    // ag_usleep(5000,philos);
-	// printf("start = %ld\n", get_time() - info.start_time);
-	i = 0;
-<<<<<<< HEAD
-	philos->right_fork = 0;
-	philos->left_fork = 0;	
-	pthread_t life_thread;
-=======
-	pthread_t *life_thread; // 
 
-    life_thread = malloc(sizeof(pthread_t) * info.no_of_philos);    
->>>>>>> 0574868d461fd2ad25accc3aa5f5934192344946
+	i = 0;
+	pthread_t *life_thread;
+
+    life_thread = calloc(200,sizeof(pthread_t));
 	if (arc == 5 || arc == 6)
 	{
 		if (parse_input(arc, argv, &info))
 			return (1);
 		if (init_philos(philos, &info))
 			return (1);
-		// simulation_start_time = gettimeofday();
 		while (i < info.no_of_philos)
 		{
 			philos[i].general_info = &info;
@@ -107,10 +108,12 @@ int	main(int arc, char **argv)
 			pthread_create(&life_thread[i], NULL, &start, &philos[i]);
 			i++;
 		}
-		while (info.no_of_philos)
+		i = 0;
+		while (i < info.no_of_philos)
 		{
 			pthread_join(life_thread[i], NULL);
-			info.no_of_philos--;
+			// info.no_of_philos--;
+			i++;
 		}
 	}
 	return (0);

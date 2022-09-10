@@ -33,7 +33,6 @@ int	 take_forks(t_philo *philo)
 		{
 			pthread_mutex_unlock(philo->left_mutex);
 			pthread_mutex_lock(philo->right_mutex);
-			// printf("phlio no %d place back right fork \n", philo->philo_id);
 			*(philo->right_fork) = 0;
 		}
 	}
@@ -80,6 +79,7 @@ int	init_mutex(t_philo *ph, t_info *info)
 		i++;
 	}
 	i = 0;
+	pthread_mutex_init(&info->pd_mutex,NULL);
 	while (i < info->no_of_philos)
 	{
 		ph[i].right_mutex = &info->mutex[i];

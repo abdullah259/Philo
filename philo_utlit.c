@@ -7,21 +7,36 @@ long	get_time()
 	return(current_time.tv_sec * 1000 + (long)(current_time.tv_usec / 1000));
 }
 
-int    ag_usleep(long c, t_philo *ph)
+void    ag_usleep(long c, t_philo *ph)
 {
     long start;
 
     start = get_time();
     while (1)
     {
-        if (!is_alive(ph))
+        if (ph->general_info->death_flag == 1)
         {
-            ph->general_info->death_flag = 1;
-			printf("no philo %d philo is dead\n",ph->philo_id);
-			return (0);
+            is_alive(ph);
+            break;
         }
         usleep(500);
         if (get_time() - start >= c)
-            return (1) ;
+            break;
     }
+}
+
+void    print_status(t_philo *ph, char c)
+{
+    pthread_mutex_lock(&ph->general_info->pd_mutex);
+    if (c == 'f')
+        printf("%ld %d has taken a fork\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    else if (c == 'e')
+        printf("%ld %d  is eating\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    else if (c == 's')
+        printf("%ld %d  is sleeping\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    else if (c == 't')
+        printf("%ld %d  is thinking\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    else if (c == 'd')
+        printf("%ld %d  died\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    pthread_mutex_unlock(&ph->general_info->pd_mutex);
 }

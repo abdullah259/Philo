@@ -17,6 +17,7 @@ typedef struct s_info{
 	int	death_flag;
 	long	start_time;
 	pthread_mutex_t	mutex[200];
+	pthread_mutex_t	pd_mutex;
 }t_info;
 
 typedef struct s_philo{
@@ -35,6 +36,7 @@ int     init_forks(t_philo *ph, t_info *info);
 int     init_philos(t_philo *ph, t_info *info);
 int     init_mutex(t_philo *ph, t_info *info);
 long	get_time();
-int     ag_usleep(long c, t_philo *ph);
-int     is_alive(t_philo *ph);
+void    ag_usleep(long c, t_philo *ph);
+void	is_alive(t_philo *ph);
+void    print_status(t_philo *ph, char c);
 #endif
