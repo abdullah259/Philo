@@ -24,8 +24,9 @@ int	 take_forks(t_philo *philo)
 		if (*(philo->left_fork) == 0)
 		{
 			*(philo->left_fork) = 1;
-			printf("phlio no %d picked right fork \n", philo->philo_id);
-			printf("phlio no %d picked LEFT fork \n", philo->philo_id);
+			printf("%ld phlio no %d picked right fork \n",get_time() - philo->general_info->start_time, philo->philo_id);
+			printf("%ld phlio no %d picked Left fork \n",get_time() - philo->general_info->start_time, philo->philo_id);
+			// printf("phlio no %d picked LEFT fork \n", philo->philo_id);
 			pthread_mutex_unlock(philo->left_mutex);
 			return (0);
 		}

@@ -1,11 +1,11 @@
 #include "philo.h"
 
-long	get_time()
+long    get_time()
 {
 	struct timeval current_time;
 	gettimeofday(&current_time, NULL);
 	return(current_time.tv_sec * 1000 + (long)(current_time.tv_usec / 1000));
-}
+} 
 
 void    ag_usleep(long c, t_philo *ph)
 {
@@ -37,6 +37,9 @@ void    print_status(t_philo *ph, char c)
     else if (c == 't')
         printf("%ld %d  is thinking\n",get_time() - ph->general_info->start_time,ph->philo_id);
     else if (c == 'd')
-        printf("%ld %d  died\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    {
+        if (ph->general_info->death_flag != 1)
+            printf("%ld %d  died\n",get_time() - ph->general_info->start_time,ph->philo_id);
+    }
     pthread_mutex_unlock(&ph->general_info->pd_mutex);
 }

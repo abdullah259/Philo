@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/10 10:32:05 by dfurneau         ###   ########.fr       */
+/*   Updated: 2022/09/12 20:59:19 by aghazi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ void	is_alive(t_philo *ph)
 {
 	if (get_time() - ph->start_eat >= ph->general_info->time_to_die)
 	{
-		ph->general_info->death_flag = 1;
+        // printf("%ld        %ld         hala wallah ya abdallah!!\n", get_time(), ph->start_eat);
 		print_status(ph,'d');
+		ph->general_info->death_flag = 1;
 	}
 }
 
@@ -26,12 +27,15 @@ void	*start(void *philo)
 	t_philo *ph = (t_philo *)philo;
 
 	ph->start_eat = ph->general_info->start_time;
-	while (ph->general_info->death_flag == 0)
+    int i;
+
+    i = ph->general_info->no_of_times_eat;
+	while (ph->general_info->death_flag == 0 && i > 0)
 	{
 		while (ph->general_info->death_flag == 0 && take_forks(ph))
 		{
 			usleep(500);
-			is_alive(ph);
+            is_alive(ph);
 		}
 		if (ph->general_info->death_flag == 1)
 		{
@@ -53,8 +57,14 @@ void	*start(void *philo)
 		}
 		drop_forks(ph);
 		print_status(ph, 's');
+        // if (ph->general_info->death_flag == 1)
+        // {
+        //     is_alive(ph);
+        //     return NULL;
+        // }
 		ag_usleep(ph->general_info->time_to_sleep,ph); // change here was to to eat || now time to slepp
 		print_status(ph, 't');
+        i--;
 	}
 	return NULL;
 }
