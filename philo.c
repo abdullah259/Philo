@@ -6,7 +6,7 @@
 /*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/12 20:59:19 by aghazi           ###   ########.fr       */
+/*   Updated: 2022/09/14 14:47:03 by aghazi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	is_alive(t_philo *ph)
 {
 	if (get_time() - ph->start_eat >= ph->general_info->time_to_die)
 	{
-        // printf("%ld        %ld         hala wallah ya abdallah!!\n", get_time(), ph->start_eat);
 		print_status(ph,'d');
 		ph->general_info->death_flag = 1;
 	}
@@ -28,9 +27,9 @@ void	*start(void *philo)
 
 	ph->start_eat = ph->general_info->start_time;
     int i;
-
+    
     i = ph->general_info->no_of_times_eat;
-	while (ph->general_info->death_flag == 0 && i > 0)
+	while (ph->general_info->death_flag == 0 && (ph->general_info->no_of_times_eat == 0 || i > 0))
 	{
 		while (ph->general_info->death_flag == 0 && take_forks(ph))
 		{
@@ -57,13 +56,9 @@ void	*start(void *philo)
 		}
 		drop_forks(ph);
 		print_status(ph, 's');
-        // if (ph->general_info->death_flag == 1)
-        // {
-        //     is_alive(ph);
-        //     return NULL;
-        // }
 		ag_usleep(ph->general_info->time_to_sleep,ph); // change here was to to eat || now time to slepp
 		print_status(ph, 't');
+        ag_usleep(0.1 * ph->general_info->time_to_eat, ph);
         i--;
 	}
 	return NULL;
@@ -104,7 +99,8 @@ int	main(int arc, char **argv)
 	i = 0;
 	pthread_t *life_thread;
 
-    life_thread = calloc(200,sizeof(pthread_t));
+    life_thread = calloc(
+        200,sizeof(pthread_t));
 	if (arc == 5 || arc == 6)
 	{
 		if (parse_input(arc, argv, &info))
@@ -117,6 +113,7 @@ int	main(int arc, char **argv)
 			philos[i].philo_id = i;
 			pthread_create(&life_thread[i], NULL, &start, &philos[i]);
 			i++;
+            usleep(100);
 		}
 		i = 0;
 		while (i < info.no_of_philos)
