@@ -4,11 +4,9 @@ int	drop_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_mutex);
 	*philo->right_fork = 0;
-	// printf("phlio no %d droped right fork \n", philo->philo_id);
 	pthread_mutex_unlock(philo->right_mutex);
 	pthread_mutex_lock(philo->left_mutex);
 	*philo->left_fork = 0;
-	// printf("phlio no %d droped left fork \n", philo->philo_id);
 	pthread_mutex_unlock(philo->left_mutex);
 	return (0);
 }
@@ -26,9 +24,6 @@ int	 take_forks(t_philo *philo)
 			*(philo->left_fork) = 1;
             print_status(philo, 'f');
             print_status(philo, 'f');
-			// printf("%ld phlio no %d picked right fork \n",get_time() - philo->general_info->start_time, philo->philo_id);
-			// printf("%ld phlio no %d picked Left fork \n",get_time() - philo->general_info->start_time, philo->philo_id);
-			// printf("phlio no %d picked LEFT fork \n", philo->philo_id);
 			pthread_mutex_unlock(philo->left_mutex);
 			return (0);
 		}
@@ -48,7 +43,7 @@ int init_forks(t_philo *ph, t_info *info)
 	int i;
 
 	i = 0;
-	info->forks = calloc(info->no_of_philos,sizeof(int));
+	info->forks = ft_calloc(info->no_of_philos,sizeof(int));
 	while (i < info->no_of_philos)
 	{
 		ph[i].right_fork = &info->forks[i];

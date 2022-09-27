@@ -14,7 +14,7 @@ void    ag_usleep(long c, t_philo *ph)
     start = get_time();
     while (1)
     {
-        if (ph->general_info->death_flag == 1)
+        if (ph->general_info->death_flag != 1)
         {
             is_alive(ph);
             break;
@@ -42,4 +42,21 @@ void    print_status(t_philo *ph, char c)
             printf("%ld %d  died\n",get_time() - ph->general_info->start_time,ph->philo_id);
    }
     pthread_mutex_unlock(&ph->general_info->pd_mutex);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+	size_t	i;
+
+	i = 0;
+	ptr = malloc(count * size);
+	if (ptr == NULL)
+		return (0);
+	while (i < count * size)
+	{
+		((unsigned char *)ptr)[i] = 0;
+		i++;
+	}
+	return (ptr);
 }

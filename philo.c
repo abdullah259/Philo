@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/14 14:47:03 by aghazi           ###   ########.fr       */
+/*   Updated: 2022/09/27 19:29:25 by dfurneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,23 +56,12 @@ void	*start(void *philo)
 		}
 		drop_forks(ph);
 		print_status(ph, 's');
-		ag_usleep(ph->general_info->time_to_sleep,ph); // change here was to to eat || now time to slepp
+		ag_usleep(ph->general_info->time_to_sleep,ph);
 		print_status(ph, 't');
         ag_usleep(0.1 * ph->general_info->time_to_eat, ph);
         i--;
 	}
 	return NULL;
-}
-
-int parse_input(int ac, char **av, t_info *info)
-{
-	info->no_of_philos = atoi(av[1]);
-	info->time_to_die = atoi(av[2]);
-	info->time_to_eat = atoi(av[3]);
-	info->time_to_sleep = atoi(av[4]);
-	if(ac == 6)
-		info->no_of_times_eat = atoi(av[5]);
-	return (0);
 }
 
 void	ft_init(t_info *ph)
@@ -99,10 +88,9 @@ int	main(int arc, char **argv)
 	i = 0;
 	pthread_t *life_thread;
 
-    life_thread = calloc(
-        200,sizeof(pthread_t));
 	if (arc == 5 || arc == 6)
 	{
+    	life_thread = ft_calloc(200,sizeof(pthread_t));
 		if (parse_input(arc, argv, &info))
 			return (1);
 		if (init_philos(philos, &info))
@@ -119,7 +107,6 @@ int	main(int arc, char **argv)
 		while (i < info.no_of_philos)
 		{
 			pthread_join(life_thread[i], NULL);
-			// info.no_of_philos--;
 			i++;
 		}
 	}

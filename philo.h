@@ -21,11 +21,11 @@ typedef struct s_info{
 }t_info;
 
 typedef struct s_philo{
-	long	start_eat; // was int but supposed to be log not int
-	int	philo_id;
-	t_info	*general_info;
-	int	*right_fork;
-	int	*left_fork;
+	long			start_eat;
+	int				philo_id;
+	t_info			*general_info;
+	int				*right_fork;
+	int				*left_fork;
 	pthread_mutex_t	*right_mutex;
 	pthread_mutex_t	*left_mutex;
 }t_philo;
@@ -39,4 +39,7 @@ long 	get_time();
 void    ag_usleep(long c, t_philo *ph);
 void	is_alive(t_philo *ph);
 void    print_status(t_philo *ph, char c);
+int		ft_atoi(char *str);
+int		parse_input(int ac, char **av, t_info *info);
+void	*ft_calloc(size_t count, size_t size);
 #endif

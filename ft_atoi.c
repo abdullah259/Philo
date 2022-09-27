@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghazi <aghazi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:38:21 by omar              #+#    #+#             */
-/*   Updated: 2022/08/23 14:42:48 by aghazi           ###   ########.fr       */
+/*   Updated: 2022/09/27 16:22:54 by dfurneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,7 @@ int	is_digit(char c)
 	return (0);
 }
 
-void	free_exit(t_data *data)
-{
-	ag_free(data);
-	ag_exit();
-}
-
-int	ft_atoi(char *str, t_data *data)
+int	ft_atoi(char *str)
 {
 	int				i;
 	int				pon;
@@ -36,16 +30,17 @@ int	ft_atoi(char *str, t_data *data)
 	pon = 1;
 	if (str[i] == '-' || str[i] == '+')
 		pon *= 1 - 2 * (str[i++] == '-');
-	if (!is_digit(str[i]))
-		free_exit(data);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		num = num * 10 + (str[i] - 48);
 		if (num > 2147483648 && pon == -1)
-			free_exit(data);
+			return (-1);
 		else if (num > 2147483647 && pon == 1)
-			free_exit(data);
+			return (-1);
 		i++;
 	}
+	if (str[i] != '\0')
+		if (!is_digit(str[i]))
+			return (-1);
 	return ((int)(pon * num));
 }
