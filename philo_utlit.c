@@ -15,10 +15,9 @@ void    ag_usleep(long c, t_philo *ph)
     while (1)
     {
         if (ph->general_info->death_flag != 1)
-        {
             is_alive(ph);
+        else
             break;
-        }
         usleep(500);
         if (get_time() - start >= c)
             break;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mal-guna <mal-guna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/27 19:29:25 by dfurneau         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:36:33 by mal-guna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	*start(void *philo)
 {
 	t_philo *ph = (t_philo *)philo;
 
-	ph->start_eat = ph->general_info->start_time;
+	ph->start_eat = get_time();
     int i;
     
     i = ph->general_info->no_of_times_eat;
@@ -36,30 +36,18 @@ void	*start(void *philo)
 			usleep(500);
             is_alive(ph);
 		}
-		if (ph->general_info->death_flag == 1)
-		{
-			is_alive(ph);
-			return NULL;
-		}
 		print_status(ph,'e');
 		ph->start_eat = get_time();
-		if (ph->general_info->death_flag == 1)
-		{
-			is_alive(ph);
-			return NULL;
-		}
 		ag_usleep(ph->general_info->time_to_eat,ph);
 		if (ph->general_info->death_flag == 1)
-		{
-			is_alive(ph);
-			return NULL;
-		}
+			break;
 		drop_forks(ph);
 		print_status(ph, 's');
 		ag_usleep(ph->general_info->time_to_sleep,ph);
 		print_status(ph, 't');
-        ag_usleep(0.1 * ph->general_info->time_to_eat, ph);
-        i--;
+		usleep(2000);
+		if(i > 0)
+        	i--;
 	}
 	return NULL;
 }

@@ -13,7 +13,7 @@ OBJ = $(SRC:.c=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) -o philo $(OBJ) -lpthread -o $(NAME)
+	$(CC) $(CFLAGS) -o philo $(OBJ) -pthread -o $(NAME)
 
 re: fclean all
 
