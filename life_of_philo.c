@@ -1,29 +1,27 @@
 #include "philo.h"
 
-int	drop_forks(t_philo *philo)
+void	check_left(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right_mutex);
-	*philo->right_fork = 0;
-	pthread_mutex_unlock(philo->right_mutex);
-	pthread_mutex_lock(philo->left_mutex);
-	*philo->left_fork = 0;
-	pthread_mutex_unlock(philo->left_mutex);
-	return (0);
+	philo->left_fork->state = 1;
+	philo->left_fork->last_used = philo->philo_id;
+	philo->right_fork->last_used = philo->philo_id;
+	print_status(philo, 'f');
+	print_status(philo, 'f');
 }
 
-int	 take_forks(t_philo *philo)
+int	take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_mutex);
-	if (*(philo->right_fork) == 0)
+	if (philo->right_fork->state == 0
+		&& philo->right_fork->last_used != philo->philo_id)
 	{
-		*(philo->right_fork) = 1;
+		philo->right_fork->state = 1;
 		pthread_mutex_unlock(philo->right_mutex);
 		pthread_mutex_lock(philo->left_mutex);
-		if (*(philo->left_fork) == 0)
+		if (philo->left_fork->state == 0
+			&& philo->left_fork->last_used != philo->philo_id)
 		{
-			*(philo->left_fork) = 1;
-            print_status(philo, 'f');
-            print_status(philo, 'f');
+			check_left(philo);
 			pthread_mutex_unlock(philo->left_mutex);
 			return (0);
 		}
@@ -31,19 +29,18 @@ int	 take_forks(t_philo *philo)
 		{
 			pthread_mutex_unlock(philo->left_mutex);
 			pthread_mutex_lock(philo->right_mutex);
-			*(philo->right_fork) = 0;
+			philo->right_fork->state = 0;
 		}
 	}
 	pthread_mutex_unlock(philo->right_mutex);
 	return (1);
 }
 
-int init_forks(t_philo *ph, t_info *info)
+int	init_forks(t_philo *ph, t_info *info)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	info->forks = ft_calloc(info->no_of_philos,sizeof(int));
 	while (i < info->no_of_philos)
 	{
 		ph[i].right_fork = &info->forks[i];
@@ -51,6 +48,8 @@ int init_forks(t_philo *ph, t_info *info)
 			ph[i].left_fork = &info->forks[info->no_of_philos - 1];
 		else
 			ph[i].left_fork = &info->forks[i - 1];
+		ph[i].right_fork->state = 0;
+		ph[i].right_fork->last_used = -1;
 		i++;
 	}
 	return (0);
@@ -77,7 +76,7 @@ int	init_mutex(t_philo *ph, t_info *info)
 		i++;
 	}
 	i = 0;
-	pthread_mutex_init(&info->pd_mutex,NULL);
+	pthread_mutex_init(&info->pd_mutex, NULL);
 	while (i < info->no_of_philos)
 	{
 		ph[i].right_mutex = &info->mutex[i];
