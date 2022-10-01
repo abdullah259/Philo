@@ -65,3 +65,10 @@ int	parse_input(int ac, char **av, t_info *info)
 	}
 	return (1);
 }
+
+int	check_flag(t_philo *ph, int *i)
+{
+	if (ph->general_info->no_of_times_eat == 0 || (*i) > 0)
+		return (1);
+	return (0);
+}

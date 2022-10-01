@@ -21,6 +21,7 @@ typedef struct s_info{
 	int				no_of_times_eat;
 	int				death_flag;
 	long			start_time;
+	int				i;
 	pthread_mutex_t	mutex[200];
 	pthread_mutex_t	pd_mutex;
 }t_info;
@@ -46,4 +47,7 @@ void	print_status(t_philo *ph, char c);
 int		ft_atoi(char *str);
 int		parse_input(int ac, char **av, t_info *info);
 void	*ft_calloc(size_t count, size_t size);
+int		check_flag(t_philo *ph, int *i);
+void	creat_philo(t_philo *philos, t_info *info, pthread_t *life_thread,
+			void *start);
 #endif

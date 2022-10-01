@@ -6,7 +6,7 @@
 /*   By: dfurneau <dfurneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 17:10:22 by aghazi            #+#    #+#             */
-/*   Updated: 2022/09/30 21:20:59 by dfurneau         ###   ########.fr       */
+/*   Updated: 2022/10/01 21:14:30 by dfurneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ void	is_alive(t_philo *ph)
 	}
 }
 
+void	check_i(int *i)
+{
+	if (*i > 0)
+		(*i)--;
+}
+
 void	*start(void *philo)
 {
 	t_philo	*ph;
@@ -29,8 +35,7 @@ void	*start(void *philo)
 	ph = (t_philo *)philo;
 	ph->start_eat = get_time();
 	i = ph->general_info->no_of_times_eat;
-	while (ph->general_info->death_flag == 0
-		&& (ph->general_info->no_of_times_eat == 0 || i > 0))
+	while (ph->general_info->death_flag == 0 && check_flag(ph, &i))
 	{
 		while (ph->general_info->death_flag == 0 && take_forks(ph))
 		{
@@ -46,12 +51,7 @@ void	*start(void *philo)
 		print_status(ph, 's');
 		ag_usleep(ph->general_info->time_to_sleep, ph);
 		print_status(ph, 't');
-		if (((ph->philo_id + 1) % 2) == 0)
-		{
-			usleep(1000);
-		}
-		if (i > 0)
-			i--;
+		check_i(&i);
 	}
 	return (NULL);
 }
@@ -86,15 +86,7 @@ int	main(int arc, char **argv)
 			return (1);
 		info.start_time = get_time();
 		printf("start = %ld\n", get_time() - info.start_time);
-		while (i < info.no_of_philos)
-		{
-			philos[i].general_info = &info;
-			philos[i].philo_id = i;
-			pthread_create(&life_thread[i], NULL, &start, &philos[i]);
-			i++;
-			usleep(100);
-		}
-		i = 0;
+		creat_philo(philos, &info, life_thread, start);
 		while (i < info.no_of_philos)
 		{
 			pthread_join(life_thread[i], NULL);
